@@ -529,8 +529,12 @@ class QueryCursor {
 		if (me.opts.sessionId !== undefined && typeof me.opts.sessionId === 'string') {
 			url.searchParams.append('session_id', me.opts.sessionId);
 		}
-		
-		url.searchParams.append('query', query);
+
+		if (query.trim().toUpperCase().startsWith('SELECT') || query.trim().toUpperCase().startsWith('INSERT')) {
+			params.body = query;
+		} else {
+			url.searchParams.append('query', query);
+		}
 		
 		if (me.connection.isUseGzip) {
 			params.headers['Accept-Encoding']  = 'gzip';
